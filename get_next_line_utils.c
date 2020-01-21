@@ -49,8 +49,8 @@ char    *ft_strjoin(const char *s1, const char *s2)
     char    *chaine;
     size_t  len_s1;
     size_t  len_s2;
-    int     i;
-    int     j;
+    size_t     i;
+    size_t     j;
 
     len_s1 = ft_strlen(s1);
     len_s2 = ft_strlen(s2);
@@ -73,25 +73,30 @@ char    *ft_strjoin(const char *s1, const char *s2)
     return (chaine);
 }
 
-int main(int ac, char **av)
+char		*ft_substr(char const *s, unsigned int start, size_t len)
 {
-    int i;
+	char	*res;
+	int		cpy;
+	size_t	lalen;
 
-    i = 1;
-    while (i < ac)
-    {
-        printf("-------ft_strlen--------\n\n");
-        printf("Mon STRLEN : %zu\n", ft_strlen(av[i]));
-        printf("Leur STRLEN : %zu\n", strlen(av[i]));
-        printf("-------ft_strdup--------\n\n");
-        printf("Mon STRDUP : %s\n", ft_strdup(av[i]));
-        printf("Leur STRDUP : %s\n", strdup(av[i]));
-        printf("-------ft_strrchr-------\n\n");
-        printf("Mon STRRCHR : %s\n", ft_strchr((av[i]), ' '));
-        printf("Leur STRRCHR : %s\n", strchr((av[i]), ' '));
-        printf("-------ft_strjoin-------\n\n");
-        printf("Mon STRJOIN : %s\n", ft_strjoin(av[i - 1], av[i]));
-        i++;
-    }
-    return (0);
+	if (s == NULL || start < 0)
+		return (NULL);
+	lalen = ft_strlen((char *)s);
+	if (start >= lalen)
+		len = 0;
+	else
+		len = lalen - start < len ? lalen - start : len;
+	res = (char *)malloc((len + 1) * sizeof(char));
+	if (res == 0)
+		return (NULL);
+	cpy = 0;
+	while (len)
+	{
+		res[cpy] = s[start];
+		cpy++;
+		start++;
+		len--;
+	}
+	res[cpy] = '\0';
+	return (res);
 }
