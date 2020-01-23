@@ -27,24 +27,24 @@ static char     *readline(char *str, int fd)
  
 int             get_next_line(int const fd, char **line)
 {
-    static char *str;
+    static char *str[3000];
     int         i;
  
-    if (ft_check(fd, &str, line) == -1)
+    if (ft_check(fd, &str[fd], line) == -1)
         return (-1);
-    str = readline(str, fd);
+    str[fd] = readline(str[fd], fd);
     i = 0;
-    if (str[i])
+    if (str[fd][i])
     {
-        while (str[i] != '\n' && str[i])
+        while (str[fd][i] != '\n' && str[fd][i])
             i++;
         if (i == 0)
             (*line) = ft_strdup("");
         else
         {
-            (*line) = ft_substr(str, 0, i);
+            (*line) = ft_substr(str[fd], 0, i);
         }
-        str = &str[i + 1];
+        str[fd] = &str[fd][i + 1];
         return (1);
     }
     else
