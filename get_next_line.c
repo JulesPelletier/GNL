@@ -16,11 +16,15 @@ static char     *readline(char *str, int fd)
 {
     char        buff[BUFFER_SIZE + 1];
     int         ret;
+    char        *tmp;
  
+    tmp = NULL;
     while ((ret = read(fd, buff, BUFFER_SIZE)) > 0)
     {
         buff[ret] = '\0';
-        str = ft_strjoin(str, buff);
+        tmp = str;
+        str = ft_strjoin(tmp, buff);
+        free(tmp);
     }
     return (str);
 }

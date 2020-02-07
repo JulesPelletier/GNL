@@ -7,11 +7,6 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
-// A retirer 
-#include <string.h>
-
-# define MAX_FD = (int)3000
-
 size_t  ft_strlen(const char *chaine);
 char    *ft_strdup(const char *chaine);
 char    *ft_strchr(const char *str, int c);
