@@ -1,13 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: juliodelavega <juliodelavega@student.42    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/13 18:37:23 by juliodelave       #+#    #+#             */
+/*   Updated: 2020/02/14 15:09:30 by juliodelave      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "get_next_line.h"
- 
+
 static int      ft_check(int fd, char **str, char **line)
 {
     if (fd < 0 || line == NULL ||(read(fd, *line, 0) == -1))
         return (-1);
     if (!*str)
     {
-        if (!(*str = (char*)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-            return (-1);
+        if (!(*str = (char*)malloc(sizeof(char) * BUFFER_SIZE)))
+        return (-1);
     }
     return (0);
 }
@@ -31,7 +44,7 @@ static char     *readline(char *str, int fd)
  
 int             get_next_line(int const fd, char **line)
 {
-    static char *str[3000];
+    static char *str[4096];
     int         i;
  
     if (ft_check(fd, &str[fd], line) == -1)
