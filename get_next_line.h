@@ -3,27 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juliodelavega <juliodelavega@student.42    +#+  +:+       +#+        */
+/*   By: julpelle <julpelle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 17:54:42 by juliodelave       #+#    #+#             */
-/*   Updated: 2020/02/14 15:10:14 by juliodelave      ###   ########.fr       */
+/*   Updated: 2020/02/18 14:37:12 by julpelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _GET_NEXT_LINE_H_
-# define _GET_NEXT_LINE_H_
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <sys/types.h>
+# include <sys/uio.h>
+# include <fcntl.h>
+# include <unistd.h>
 
-size_t          ft_strlen(const char *chaine);
-char            *ft_strdup(const char *chaine);
-char            *ft_strchr(const char *str, int c);
-char            *ft_strjoin(const char *s1, const char *s2);
-char            *ft_substr(char const *s, unsigned int start, size_t len);
+int				ft_strlen(const char *s);
+char			*ft_strdup(const char *s);
+char			*ft_strjoin(char *s1, char *s2);
+char			*ft_substr(char *s, int start, int len);
 
-int             get_next_line(int fd, char **line);
+int				ft_s_is(char *s, char c);
+char			*ft_free(char *s);
+void			ft_readline(char **keep, char *buf, int *value, int fd);
+
+int				get_next_line(int fd, char **line);
 
 #endif

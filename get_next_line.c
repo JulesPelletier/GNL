@@ -3,68 +3,72 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juliodelavega <juliodelavega@student.42    +#+  +:+       +#+        */
+/*   By: julpelle <julpelle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 18:37:23 by juliodelave       #+#    #+#             */
-/*   Updated: 2020/02/14 15:09:30 by juliodelave      ###   ########.fr       */
+/*   Updated: 2020/02/18 14:56:52 by julpelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "get_next_line.h"
+#include <sys/types.h>
+#include <sys/uio.h>
 
-static int      ft_check(int fd, char **str, char **line)
+int			ft_s_is(char *s, char c)
 {
-    if (fd < 0 || line == NULL ||(read(fd, *line, 0) == -1))
-        return (-1);
-    if (!*str)
-    {
-        if (!(*str = (char*)malloc(sizeof(char) * BUFFER_SIZE)))
-        return (-1);
-    }
-    return (0);
+	int		i;
+
+	i = 0;
+	if (!s)
+		return (-1);
+	while (s[i])
+	{
+		if (s[i] == c)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
- 
-static char     *readline(char *str, int fd)
+
+char		*ft_free(char *s)
 {
-    char        buff[BUFFER_SIZE + 1];
-    int         ret;
-    char        *tmp;
- 
-    tmp = NULL;
-    while ((ret = read(fd, buff, BUFFER_SIZE)) > 0)
-    {
-        buff[ret] = '\0';
-        tmp = str;
-        str = ft_strjoin(tmp, buff);
-        free(tmp);
-    }
-    return (str);
+	free(s);
+	s = NULL;
+	return (s);
 }
- 
-int             get_next_line(int const fd, char **line)
+
+void		ft_parse(char **str, char *buf, int *ret, int fd)
 {
-    static char *str[4096];
-    int         i;
- 
-    if (ft_check(fd, &str[fd], line) == -1)
-        return (-1);
-    str[fd] = readline(str[fd], fd);
-    i = 0;
-    if (str[fd][i])
-    {
-        while (str[fd][i] != '\n' && str[fd][i])
-            i++;
-        if (i == 0)
-            (*line) = ft_strdup("");
-        else
-        {
-            (*line) = ft_substr(str[fd], 0, i);
-        }
-        str[fd] = &str[fd][i + 1];
-        return (1);
-    }
-    else
-        (*line) = ft_strdup("");
-    return (0);
+	while (ft_s_is(*str, '\n') == -1
+			&& (*ret = read(fd, buf, BUFFER_SIZE)) > 0)
+	{
+		buf[*ret] = '\0';
+		*str = ft_strjoin(*str, buf);
+	}
+}
+
+int			get_next_line(int fd, char **line)
+{
+	static char		*str = NULL;
+	char			buf[BUFFER_SIZE + 1];
+	int				ret;
+	char			*tmp;
+
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, buf, 0) < 0 || line == NULL)
+		return (-1);
+	ft_parse(&str, buf, &ret, fd);
+	if (ft_s_is(str, '\n') > -1)
+	{
+		*line = ft_substr(str, 0, ft_s_is(str, '\n'));
+		tmp = ft_substr(str, 0, ft_strlen(str));
+		str = ft_substr(tmp, (ft_s_is(str, '\n') + 1), ft_strlen(str));
+		tmp = ft_free(tmp);
+		return (1);
+	}
+	else
+	{
+		*line = ft_substr(str, 0, ft_strlen(str));
+		str = ft_free(str);
+	}
+	return (0);
 }
