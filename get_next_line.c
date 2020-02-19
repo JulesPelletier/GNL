@@ -5,14 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: julpelle <julpelle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/13 18:37:23 by juliodelave       #+#    #+#             */
-/*   Updated: 2020/02/18 14:56:52 by julpelle         ###   ########.fr       */
+/*   Created: 2020/02/19 13:26:32 by julpelle          #+#    #+#             */
+/*   Updated: 2020/02/19 15:08:57 by julpelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <sys/types.h>
-#include <sys/uio.h>
 
 int			ft_s_is(char *s, char c)
 {
@@ -37,38 +35,39 @@ char		*ft_free(char *s)
 	return (s);
 }
 
-void		ft_parse(char **str, char *buf, int *ret, int fd)
+void		ft_parse(char **keep, char *buf, int *value, int fd)
 {
-	while (ft_s_is(*str, '\n') == -1
-			&& (*ret = read(fd, buf, BUFFER_SIZE)) > 0)
+	while (ft_s_is(*keep, '\n') == -1
+			&& (*value = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
-		buf[*ret] = '\0';
-		*str = ft_strjoin(*str, buf);
+		buf[*value] = '\0';
+		*keep = ft_strjoin(*keep, buf);
 	}
 }
 
 int			get_next_line(int fd, char **line)
 {
-	static char		*str = NULL;
+	static char		*keep = NULL;
 	char			buf[BUFFER_SIZE + 1];
-	int				ret;
+	int				value;
 	char			*tmp;
 
 	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, buf, 0) < 0 || line == NULL)
 		return (-1);
-	ft_parse(&str, buf, &ret, fd);
-	if (ft_s_is(str, '\n') > -1)
+	ft_parse(&keep, buf, &value, fd);
+	if (ft_s_is(keep, '\n') > -1)
 	{
-		*line = ft_substr(str, 0, ft_s_is(str, '\n'));
-		tmp = ft_substr(str, 0, ft_strlen(str));
-		str = ft_substr(tmp, (ft_s_is(str, '\n') + 1), ft_strlen(str));
+		*line = ft_substr(keep, 0, ft_s_is(keep, '\n'));
+		tmp = ft_substr(keep, 0, ft_strlen(keep));
+		keep = ft_free(keep);
+		keep = ft_substr(tmp, (ft_s_is(tmp, '\n') + 1), ft_strlen(tmp));
 		tmp = ft_free(tmp);
 		return (1);
 	}
 	else
 	{
-		*line = ft_substr(str, 0, ft_strlen(str));
-		str = ft_free(str);
+		*line = ft_substr(keep, 0, ft_strlen(keep));
+		keep = ft_free(keep);
 	}
 	return (0);
 }
