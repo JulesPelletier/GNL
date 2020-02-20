@@ -25,16 +25,13 @@ int     main(int ac, char **av)
     int ret;
 
     (void)ac;
-    fd1 = open(av[1], O_RDONLY);
-    fd2 = open(av[2], O_RDONLY);
-    fd = fd1;
+    fd = open(av[1], O_RDONLY);
     while ((ret = get_next_line(fd, &line)) > 0)
     {
         printf("[fd : %d] : [%d] : %s\n", fd, ret, line);
         free(line);
-        fd = (fd == fd1 ? fd2 : fd1);
     }
-    fd = (fd == fd1 ? fd2 : fd1);
     printf("[fd : %d] : [%d] : %s\n", fd, ret, line);
     free(line);
+    system("leaks a.out");
 }
