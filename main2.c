@@ -19,8 +19,6 @@
 int     main(int ac, char **av)
 {
     int fd;
-    int fd1;
-    int fd2;
     char *line;
     int ret;
 
